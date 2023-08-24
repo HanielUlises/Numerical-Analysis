@@ -2,53 +2,54 @@
 #include <cstdlib>
 #include <cmath>
 
-class FuncionMonteCarlo{
+template <typename T>
+class FuncionMonteCarlo {
 public:
-    double evaluar(double x) const{
-        return (pow(x, 4) * exp(-x))/(x+1); //Funcion a evaluar con la variable que se toma en cada iteracion
+    T evaluar(T x) const {
+        return (std::pow(x, 4) * std::exp(-x)) / (x + 1);
     }
 };
 
-class EstimadorMonteCarlo{
+template <typename T>
+class EstimadorMonteCarlo {
 public:
-    EstimadorMonteCarlo(const FuncionMonteCarlo& funcion) : funcion_(funcion) {}
+    EstimadorMonteCarlo(const FuncionMonteCarlo<T>& funcion) : funcion_(funcion) {}
 
-    double estimar(double limiteInferior, double limiteSuperior, int iteraciones){
-        double sumaTotal = 0;
+    T estimar(T limiteInferior, T limiteSuperior, int iteraciones) {
+        T sumaTotal = 0;
 
-        for (int i = 0; i < iteraciones; i++){
-            double numAleatorio = limiteInferior + (double(rand()) / RAND_MAX) * (limiteSuperior - limiteInferior); //Variable Xi aleatoria que varía entre los límites de integración
-            double valorFuncion = funcion_.evaluar(numAleatorio); //Evaluacion de la funcion en el punto
-            sumaTotal += valorFuncion; 
+        for (int i = 0; i < iteraciones; i++) {
+            T numAleatorio = limiteInferior + (T(std::rand()) / RAND_MAX) * (limiteSuperior - limiteInferior);
+            T valorFuncion = funcion_.evaluar(numAleatorio);
+            sumaTotal += valorFuncion;
         }
- 
-        double estimacion = (limiteSuperior - limiteInferior) * sumaTotal / iteraciones; //Estimacion dada: (b - a) * 1/n * Σf(Xi) i=1 hasta n
+
+        T estimacion = (limiteSuperior - limiteInferior) * sumaTotal / iteraciones;
         return estimacion;
     }
 
 private:
-    const FuncionMonteCarlo& funcion_;
+    const FuncionMonteCarlo<T>& funcion_;
 };
 
-int main(){
-    FuncionMonteCarlo funcionMonteCarlo;
-    EstimadorMonteCarlo estimador(funcionMonteCarlo);
 
-    double limiteInferior; //a
-    double limiteSuperior; //b
-    int iteraciones = 800; //Aproximaciones varían según la cantidad de operaciones realizadas
+int main() {
+    FuncionMonteCarlo<double> funcionMonteCarlo;
+    EstimadorMonteCarlo<double> estimador(funcionMonteCarlo);
 
-    printf("--Limites de integracion--\n");
-    printf("Limite inferior: " );
-    scanf("%lf", &limiteInferior);
-    printf("\nLimite superior: ");
-    scanf("%lf", &limiteSuperior);
+    double limiteInferior;
+    double limiteSuperior;
+    int iteraciones = 800;
+
+    std::cout << "--Limites de integracion--" << std::endl;
+    std::cout << "Limite inferior: ";
+    std::cin >> limiteInferior;
+    std::cout << "\nLimite superior: ";
+    std::cin >> limiteSuperior;
 
     double estimacion = estimador.estimar(limiteInferior, limiteSuperior, iteraciones);
 
-
-    printf("Estimación para %.1f -> %.1f es %.2f, (%i iteraciones)\n",
-           limiteInferior, limiteSuperior, estimacion, iteraciones);
+    std::cout << "Estimación para " << limiteInferior << " -> " << limiteSuperior << " es " << estimacion << " (" << iteraciones << " iteraciones)" << std::endl;
 
     return 0;
 }
