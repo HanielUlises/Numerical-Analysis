@@ -1,4 +1,5 @@
 #include "iostream"
 
-double infiniteSeries(int number) ;
+double infiniteSeriesRecursive(int number);
+double infiniteSeriesForLoop(int number);
 double approach(int number);
