@@ -25,8 +25,45 @@ double infiniteSeriesForLoop(int number) {
 
 double approach(int number) {
     double e = 0.0;
-    for (int i = 0; i <= number; i++) {
-        e += infiniteSeriesForLoop(i); // You can choose either approach here
-    }
+    int option;
+
+    do {
+        std::cout<<"======= Select an option ======= "<<std::endl;
+        std::cout << "1. Calculate 'e' using the for loop approach" << std::endl;
+        std::cout << "2. Calculate 'e' using the recursive approach" << std::endl;
+        std::cout << "0. Exit" << std::endl;
+        std::cout << "Enter your choice: ";
+        std::cin >> option;
+        std::cout<<std::endl;
+
+        switch (option) {
+            case 1:
+                std::cout <<"\n";
+                for (int i = 0; i <= number; i++) {
+                    e += infiniteSeriesForLoop(i);
+                }
+                std::cout << "e calculated using the for loop approach: " << e << std::endl;
+                option = 0;
+                break;
+
+            case 2:
+                for (int i = 0; i <= number; i++) {
+                    e += infiniteSeriesRecursive(i);
+                }
+                std::cout << "e calculated using the recursive approach: " << e << std::endl;
+                option = 0;
+                break;
+
+            case 0:
+                std::cout << "Exiting the program." << std::endl;
+                break;
+
+            default:
+                std::cout << "Invalid option. Please choose again." << std::endl;
+                break;
+        }
+
+    } while (option != 0);
+    
     return e;
 }
