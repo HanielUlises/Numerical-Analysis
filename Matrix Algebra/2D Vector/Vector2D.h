@@ -34,12 +34,31 @@ public:
 	Vector2D& operator*= (float scale);
 	Vector2D& operator/= (float scale);
 
+	Vector2D operator+(const Vector2D& vec) const;
+	Vector2D operator-(const Vector2D& vec) const;
+	Vector2D operator+=(const Vector2D& vec);
+	Vector2D operator-=(const Vector2D& vec);
+
+	// Magnitude of a vector
+	float Magnitude  () const;
+	// Unit vector and normalized vector
+	Vector2D getUnitVect() const;
+	Vector2D& normalizeVect();
+	
+	//Distance between two vectors
+	float distance (const Vector2D& vec) const;
+	//Dot product of two vector
+	float dotProduct (const Vector2D& vec) const;
+	// Angle between two vectors
+	float angleBetween (const Vector2D& vec2) const;
+	// Projection of a vector onto another one
+	Vector2D projectOnto (const Vector2D& vec) const;
+
 	friend Vector2D operator*(float scalar, const Vector2D& vect);
 
 private:
 	float mX, mY;
 };
-
 
 
 #endif /* VECTOR2D_H_ */
