@@ -38,6 +38,7 @@ int main() {
 
     std::ofstream dataFile("data.txt");
 
+    // Data for GNUPlot
     for(double z = -2; z <= 2; z += 0.01) {
         double val_f = exp(exp(z));
         double val_df = df(z);
