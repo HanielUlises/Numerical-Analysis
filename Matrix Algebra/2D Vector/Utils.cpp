@@ -119,3 +119,7 @@ Vector2D Vector2D::projectOnto (const Vector2D& vec2) const{
 float Vector2D::angleBetween (const Vector2D& vec2) const{
 	return acosf(getUnitVect().dotProduct(vec2.getUnitVect()));
 }
+
+Vector2D Vector2D::reflect(const Vector2D& normal) const{
+	return *this - 2 * projectOnto(normal);
+}

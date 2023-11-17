@@ -53,6 +53,7 @@ public:
 	float angleBetween (const Vector2D& vec2) const;
 	// Projection of a vector onto another one
 	Vector2D projectOnto (const Vector2D& vec) const;
+	Vector2D reflect(const Vector2D& normal) const;
 
 	friend Vector2D operator*(float scalar, const Vector2D& vect);
 
