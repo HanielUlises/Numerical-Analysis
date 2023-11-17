@@ -123,3 +123,33 @@ float Vector2D::angleBetween (const Vector2D& vec2) const{
 Vector2D Vector2D::reflect(const Vector2D& normal) const{
 	return *this - 2 * projectOnto(normal);
 }
+
+void Vector2D::rotate (float angle, const Vector2D& aroundPoint){
+	float cosine  = cosf(angle);
+	float sine = sinf(angle);
+
+	Vector2D thisVector(mX, mY);
+
+	thisVector -= aroundPoint;
+
+	float xRot = thisVector.mX * cosine - thisVector.mY * sine;
+	float yRot = thisVector.mX * sine + thisVector.mY * cosine;
+
+	Vector2D rotated = Vector2D(xRot, yRot);
+	*this = rotated + aroundPoint;
+}
+
+Vector2D Vector2D::rotation (float angle, const Vector2D& aroundPoint) const{
+		float cosine  = cosf(angle);
+	float sine = sinf(angle);
+
+	Vector2D thisVector(mX, mY);
+
+	thisVector -= aroundPoint;
+
+	float xRot = thisVector.mX * cosine - thisVector.mY * sine;
+	float yRot = thisVector.mX * sine + thisVector.mY * cosine;
+
+	Vector2D rotated = Vector2D(xRot, yRot);
+	return rotated + aroundPoint;
+}

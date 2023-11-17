@@ -45,15 +45,20 @@ public:
 	Vector2D getUnitVect() const;
 	Vector2D& normalizeVect();
 	
-	//Distance between two vectors
+	// Distance between two vectors
 	float distance (const Vector2D& vec) const;
-	//Dot product of two vector
+	// Dot product of two vector
 	float dotProduct (const Vector2D& vec) const;
 	// Angle between two vectors
 	float angleBetween (const Vector2D& vec2) const;
 	// Projection of a vector onto another one
 	Vector2D projectOnto (const Vector2D& vec) const;
+	// Reflection a given vector
 	Vector2D reflect(const Vector2D& normal) const;
+	// Rotation of a point
+	void rotate (float angle, const Vector2D& aroundPoint);
+	// Result of rotating that given point
+	Vector2D rotation (float angle, const Vector2D& aroundPoint) const;
 
 	friend Vector2D operator*(float scalar, const Vector2D& vect);
 
