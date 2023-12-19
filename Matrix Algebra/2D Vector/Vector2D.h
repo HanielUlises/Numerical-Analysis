@@ -57,11 +57,12 @@ public:
 	Vector2D reflect(const Vector2D& normal) const;
 	// Rotation of a point
 	void rotate (float angle, const Vector2D& aroundPoint);
+	void clampMagnitude(float maxMagnitude);
 	// Result of rotating that given point
 	Vector2D rotation (float angle, const Vector2D& aroundPoint) const;
 
 	friend Vector2D operator*(float scalar, const Vector2D& vect);
-
+	
 private:
 	float mX, mY;
 };

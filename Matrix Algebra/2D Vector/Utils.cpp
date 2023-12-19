@@ -153,3 +153,18 @@ Vector2D Vector2D::rotation (float angle, const Vector2D& aroundPoint) const{
 	Vector2D rotated = Vector2D(xRot, yRot);
 	return rotated + aroundPoint;
 }
+
+void Vector2D::clampMagnitude(float maxMagnitude) {
+    float mag = Magnitude();
+    if (mag > maxMagnitude) {
+        float scale = maxMagnitude / mag;
+        mX *= scale;
+        mY *= scale;
+    }
+}
+
+static float Vector2D::(const Vector2D& from, const Vector2D& to) {
+    float dot = from.dotProduct(to);
+    float det = from.crossProduct(to);
+    return atan2(det, dot);
+}
