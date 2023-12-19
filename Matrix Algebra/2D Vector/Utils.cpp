@@ -154,6 +154,7 @@ Vector2D Vector2D::rotation (float angle, const Vector2D& aroundPoint) const{
 	return rotated + aroundPoint;
 }
 
+<<<<<<< HEAD
 float Vector2D::crossProduct(const Vector2D& vec) const {
     return mX * vec.mY - mY * vec.mX;
 }
@@ -162,6 +163,8 @@ Vector2D Vector2D::lerp(const Vector2D& a, const Vector2D& b, float t) {
     return Vector2D(a.mX + (b.mX - a.mX) * t, a.mY + (b.mY - a.mY) * t);
 }
 
+=======
+>>>>>>> fe6925fb4dfacac637cd78800357334d2ddb7db9
 void Vector2D::clampMagnitude(float maxMagnitude) {
     float mag = Magnitude();
     if (mag > maxMagnitude) {
@@ -171,8 +174,16 @@ void Vector2D::clampMagnitude(float maxMagnitude) {
     }
 }
 
+<<<<<<< HEAD
 float Vector2D::angleTo(const Vector2D& from, const Vector2D& to) {
     float dot = from.dotProduct(to);
     float det = from.crossProduct(to); // Using the crossProduct method defined earlier
     return atan2(det, dot);
 }
+=======
+static float Vector2D::(const Vector2D& from, const Vector2D& to) {
+    float dot = from.dotProduct(to);
+    float det = from.crossProduct(to);
+    return atan2(det, dot);
+}
+>>>>>>> fe6925fb4dfacac637cd78800357334d2ddb7db9

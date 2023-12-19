@@ -60,7 +60,7 @@ public:
 	// Rotation of a point
 	void rotate (float angle, const Vector2D& aroundPoint);
 	// Clamp Magnitude
-	void Vector2D::clampMagnitude(float maxMagnitude);
+	void clampMagnitude(float maxMagnitude);
 	// Result of rotating that given point
 	Vector2D rotation (float angle, const Vector2D& aroundPoint) const;
 	// Linear Interpolation 
@@ -68,7 +68,7 @@ public:
 	static float angleTo(const Vector2D& from, const Vector2D& to);
 
 	friend Vector2D operator*(float scalar, const Vector2D& vect);
-
+	
 private:
 	float mX, mY;
 };
