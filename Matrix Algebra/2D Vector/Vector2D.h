@@ -47,8 +47,10 @@ public:
 	
 	// Distance between two vectors
 	float distance (const Vector2D& vec) const;
-	// Dot product of two vector
+	// Dot product of two vectors
 	float dotProduct (const Vector2D& vec) const;
+	// Cross product of two vectors
+	float crossProduct(const Vector2D& vec) const;
 	// Angle between two vectors
 	float angleBetween (const Vector2D& vec2) const;
 	// Projection of a vector onto another one
@@ -59,6 +61,8 @@ public:
 	void rotate (float angle, const Vector2D& aroundPoint);
 	// Result of rotating that given point
 	Vector2D rotation (float angle, const Vector2D& aroundPoint) const;
+	// Linear Interpolation 
+	Vector2D lerp(const Vector2D& a, const Vector2D& b, float t);
 
 	friend Vector2D operator*(float scalar, const Vector2D& vect);
 

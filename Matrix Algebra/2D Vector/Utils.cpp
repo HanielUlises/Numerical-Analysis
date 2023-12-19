@@ -153,3 +153,11 @@ Vector2D Vector2D::rotation (float angle, const Vector2D& aroundPoint) const{
 	Vector2D rotated = Vector2D(xRot, yRot);
 	return rotated + aroundPoint;
 }
+
+float Vector2D::crossProduct(const Vector2D& vec) const {
+    return mX * vec.mY - mY * vec.mX;
+}
+
+Vector2D Vector2D::lerp(const Vector2D& a, const Vector2D& b, float t) {
+    return Vector2D(a.mX + (b.mX - a.mX) * t, a.mY + (b.mY - a.mY) * t);
+}
