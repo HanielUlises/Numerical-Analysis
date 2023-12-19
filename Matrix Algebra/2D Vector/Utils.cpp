@@ -161,3 +161,18 @@ float Vector2D::crossProduct(const Vector2D& vec) const {
 Vector2D Vector2D::lerp(const Vector2D& a, const Vector2D& b, float t) {
     return Vector2D(a.mX + (b.mX - a.mX) * t, a.mY + (b.mY - a.mY) * t);
 }
+
+void Vector2D::clampMagnitude(float maxMagnitude) {
+    float mag = Magnitude();
+    if (mag > maxMagnitude) {
+        float scale = maxMagnitude / mag;
+        mX *= scale;
+        mY *= scale;
+    }
+}
+
+float Vector2D::angleTo(const Vector2D& from, const Vector2D& to) {
+    float dot = from.dotProduct(to);
+    float det = from.crossProduct(to); // Using the crossProduct method defined earlier
+    return atan2(det, dot);
+}

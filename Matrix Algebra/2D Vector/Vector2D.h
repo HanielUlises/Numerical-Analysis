@@ -59,10 +59,13 @@ public:
 	Vector2D reflect(const Vector2D& normal) const;
 	// Rotation of a point
 	void rotate (float angle, const Vector2D& aroundPoint);
+	// Clamp Magnitude
+	void Vector2D::clampMagnitude(float maxMagnitude);
 	// Result of rotating that given point
 	Vector2D rotation (float angle, const Vector2D& aroundPoint) const;
 	// Linear Interpolation 
 	Vector2D lerp(const Vector2D& a, const Vector2D& b, float t);
+	static float angleTo(const Vector2D& from, const Vector2D& to);
 
 	friend Vector2D operator*(float scalar, const Vector2D& vect);
 
