@@ -5,18 +5,19 @@
 std::vector<double> jacobi(const std::vector<std::vector<double>>& A, const std::vector<double>& b, std::vector<double> x, int max_iter) {
     int n = A.size();
     std::vector<double> prev_x = x;
-
+    
     for (int iter = 0; iter < max_iter; ++iter) {
         for (int i = 0; i < n; ++i) {
             double sum = 0.0;
             for (int j = 0; j < n; ++j) {
+                // Not diagonally dominant matrix 
                 if (i != j) {
                     sum += A[i][j] * prev_x[j];
                 }
             }
             x[i] = (b[i] - sum) / A[i][i];
         }
-        prev_x = x; // Update the previous iteration values
+        prev_x = x;
     }
 
     return x;
