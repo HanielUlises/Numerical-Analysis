@@ -1,49 +1,60 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vector>
 #include <string>
-#include <sstream>
+#include <cmath>
 
 struct IrisData {
     double sepal_length;
     double petal_width;
 };
 
-// Function to read data from a string
-void readData(std::vector<IrisData>& data, const std::string& dataString) {
-    std::istringstream dataStream(dataString);
-    std::string line;
+bool leerCSV(const std::string& archivo, std::vector<IrisData>& datos) {
+    std::ifstream file(archivo);
+    std::string linea, temp;
 
-    // Skip the header line
-    std::getline(dataStream, line);
+    if (!file.is_open()) {
+        std::cerr << "Error al abrir el archivo." << std::endl;
+        return false;
+    }
 
-    while (std::getline(dataStream, line)) {
-        std::istringstream lineStream(line);
+    std::getline(file, linea);
+
+    while (std::getline(file, linea)) {
+        std::istringstream ss(linea);
         std::string token;
         std::vector<std::string> tokens;
 
-        while (std::getline(lineStream, token, ',')) {
+        while (std::getline(ss, token, ',')) {
             tokens.push_back(token);
         }
 
         if (tokens.size() >= 5) {
-            IrisData point;
-            point.sepal_length = std::stod(tokens[0]);
-            point.petal_width = std::stod(tokens[3]);
-            data.push_back(point);
+            try {
+                double sepal_length = std::stod(tokens[0]);
+                double petal_width = std::stod(tokens[3]);
+                datos.push_back({sepal_length, petal_width});
+            } catch (const std::invalid_argument& e) {
+                std::cerr << "Error al convertir los datos: " << e.what() << std::endl;
+                continue;
+            }
         }
     }
+
+    file.close();
+    return true;
 }
 
-// Function to perform linear regression
-void linearRegression(const std::vector<IrisData>& data, double& Co, double& C1) {
+void ajusteLineal(const std::vector<IrisData>& datos, double& Co, double& C1) {
     double sum_x = 0, sum_y = 0, sum_xy = 0, sum_x2 = 0;
-    int n = data.size();
+    int n = datos.size();
 
-    for (const auto& d : data) {
-        sum_x += d.petal_width;
-        sum_y += d.sepal_length;
-        sum_xy += d.sepal_length * d.petal_width;
-        sum_x2 += d.petal_width * d.petal_width;
+    for (const auto& dato : datos) {
+        sum_x += dato.petal_width;
+        sum_y += dato.sepal_length;
+        sum_xy += dato.sepal_length * dato.petal_width;
+        sum_x2 += dato.petal_width * dato.petal_width;
     }
 
     C1 = (n * sum_xy - sum_x * sum_y) / (n * sum_x2 - sum_x * sum_x);
@@ -51,18 +62,19 @@ void linearRegression(const std::vector<IrisData>& data, double& Co, double& C1)
 }
 
 int main() {
-    std::vector<IrisData> data;
+    std::vector<IrisData> datos;
+    std::string archivo = "iris.csv";
 
-    std::string dataString = "iris.csv";
+    if (!leerCSV(archivo, datos)) {
+        std::cerr << "No se pudo leer el archivo." << std::endl;
+        return 1;
+    }
 
-    readData(data, dataString);
+    double Co = 0;
+    double C1 = 0;
+    ajusteLineal(datos, Co, C1);
 
-    double Co = 2;
-    double C1 = 2;
-
-    linearRegression(data, Co, C1);
-
-    std::cout << "Linear Fit: sepal_length = " << Co << " + " << C1 << " * petal_width" << std::endl;
+    std::cout << "Ajuste Lineal: sepal_length = " << Co << " + " << C1 << " * petal_width" << std::endl;
 
     return 0;
 }
