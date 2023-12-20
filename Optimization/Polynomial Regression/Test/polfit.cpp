@@ -48,6 +48,7 @@ bool leerCSV(const std::string& archivo, std::vector<Datos>& datos) {
 // Se calculan los coeficientes del ajuste polinómico
 std::vector<double> ajustePolinomico(const std::vector<Datos>& datos, double tol) {
     int n = datos.size();
+    int it = 0;
     double C0 = 0, C1 = 0, C2 = 0;
     double C0_new, C1_new, C2_new;
     double error;
@@ -76,8 +77,10 @@ std::vector<double> ajustePolinomico(const std::vector<Datos>& datos, double tol
         C0 = C0_new;
         C1 = C1_new;
         C2 = C2_new;
-    } while (error > tol);
 
+        it++;
+    } while (error > tol);
+    std::cout<<it<<std::endl;
     return {C0, C1, C2};
 }
 
