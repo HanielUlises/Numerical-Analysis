@@ -10,7 +10,7 @@ std::vector<double> jacobi(const std::vector<std::vector<double>>& A, const std:
     
     for (int iter = 0; iter < max_iter; ++iter) {
         for (int i = 0; i < n; ++i) {
-            prev_x[i] = x[i]; // Store the old values
+            prev_x[i] = x[i];
         }
 
         for (int i = 0; i < n; ++i) {
@@ -22,8 +22,6 @@ std::vector<double> jacobi(const std::vector<std::vector<double>>& A, const std:
             }
             new_x[i] = (b[i] - sum) / A[i][i];
         }
-        
-        // Update the iteration values
         x = new_x;
     }
 
