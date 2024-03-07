@@ -1,6 +1,10 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include <algorithm> 
+#include <vector>
+#include <stdexcept>
+
 // Ontological definition
 // I've always wanted to write this into a .h file (sob)
 template <class T>
@@ -25,6 +29,7 @@ class Matrix{
 
     private:
     int rows, columns;
+    std::vector<T> data;
 };
 
 #endif // MATRIX_H
