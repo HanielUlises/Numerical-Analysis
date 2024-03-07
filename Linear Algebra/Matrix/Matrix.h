@@ -26,10 +26,31 @@ class Matrix{
     int get_num_rows();
     int get_num_cols();
 
+    // Operations
+    // Equality
+    bool operator== (const Matrix<t> & rhs);
+
+    // Sum of matrices
+    template <class U> friend Matrix<U> operator+ (const Matrix<U>& lhs, cosnt Matrix<U>& rhs);
+    template <class U> friend Matrix<U> operator+ (const U& lhs, const Matrix<U>& rhs);
+    tempalte <class U> friend Matrix<U> operator+ (cconst Matrix<U>& lhs, const U& rhs);
+
+    // Difference of matrices
+    template <class U> friend Matrix<U> operator- (const Matrix<U>& lhs, cosnt Matrix<U>& rhs);
+    template <class U> friend Matrix<U> operator- (const U& lhs, const Matrix<U>& rhs);
+    tempalte <class U> friend Matrix<U> operator- (cconst Matrix<U>& lhs, const U& rhs);
+
+    // Product of matrices
+    template <class U> friend Matrix<U> operator* (const Matrix<U>& lhs, cosnt Matrix<U>& rhs);
+    template <class U> friend Matrix<U> operator* (const U& lhs, const Matrix<U>& rhs);
+    tempalte <class U> friend Matrix<U> operator* (cconst Matrix<U>& lhs, const U& rhs);
 
     private:
-    int rows, columns;
-    std::vector<T> data;
+    int sub_index(int row, int col);
+
+    private:
+    int rows, columns, n_elements;
+    T* matrix_data;
 };
 
 #endif // MATRIX_H

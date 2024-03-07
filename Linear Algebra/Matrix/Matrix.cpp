@@ -4,33 +4,77 @@
 // Default constructor
 // New matrix with 0s
 template <class T>
-Matrix<T>::Matrix() : rows(0), columns(0) {}
+Matrix<T>::Matrix() {
+    rows = 1;
+    columns = 1;
+    n_elements = 1;
+    matrix_data = new T[n_elements];
+    matrix_data[0] = 0.0;
+}
 
-// Constructor with rows and columns
+// Constructor with specified rows and columns
 template <class T>
-Matrix<T>::Matrix(int rows, int columns) : rows(rows), columns(columns), data(rows * columns) {}
+Matrix<T>::Matrix(int rows, int columns) {
+    this -> rows = rows;
+    this -> columns = columns;
+    n_elements = rows * columns;
+    matrix_data = new T[n_elements];
 
-// Constructor with rows, columns, and data
+    for(int i = 0; i < n_elements; i++){
+        matrix_data[i] = 0.0;
+    }
+}
+
+// Constructor with rows, columns, and data specified
 template <class T>
-Matrix<T>::Matrix(int rows, int columns, const T* input_data) : rows(rows), columns(columns), data(rows * columns) {
-    std::copy(input_data, input_data + rows * columns, data.begin());
+Matrix<T>::Matrix(int rows, int columns, const T* input_data) {
+    this -> rows = rows;
+    this -> columns = columns;
+    n_elements = rows * columns;
+    matrix_data = new T[n_elements];
+
+    for(int i = 0; i < n_elements; i++){
+        matrix_data[i] = input_data[i];
+    }
 }
 
 // Copy constructor
 template <class T>
-Matrix<T>::Matrix(const Matrix<T>& input_Matrix) : rows(input_Matrix.rows), columns(input_Matrix.columns), data(input_Matrix.data) {}
+Matrix<T>::Matrix(const Matrix<T>& input_Matrix) {
+    rows = input_Matrix.rows;
+    columns = input_Matrix.columns;
+    n_elements = input_Matrix.n_elements;
+    matrix_data = new T[n_elements];
+
+    for(int i = 0; i < n_elements; i++){
+        matrix_data[i] = input_Matrix.matrix_data[i];
+    }
+}
 
 // Destructor
 template <class T>
-Matrix<T>::~Matrix() {}
+Matrix<T>::~Matrix() {
+    if(matrix_data != nullptr){
+        delete[] matrix_data;
+    }
+}
 
 // Resize the matrix
 template <class T>
 bool Matrix<T>::resize(int nRows, int nColumns) {
-    data.resize(nRows * nColumns);
     rows = nRows;
     columns = nColumns;
-    return true; 
+    n_elements = (rows * columns);
+    delete[] matrix_data;
+    matrix_data = new T[n_elements];
+    if(matrix_data != nullptr){
+        for(int i = 0; i < n_elements; i++){
+            matrix_data[i] = 0.0;
+        }
+        return true;
+    }else{
+        return false;
+    }
 }
 
 template <class T>
