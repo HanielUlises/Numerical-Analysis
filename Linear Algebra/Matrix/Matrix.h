@@ -18,7 +18,9 @@ class Matrix{
     
     // Access methods
     T get_element (int row, int column);
-    bool set_element (int row, int column)
+    bool set_element (int row, int column, T element_value);
+    int get_num_rows();
+    int get_num_cols();
 
 
     private:
