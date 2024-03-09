@@ -1,6 +1,5 @@
 #include "Matrix.h"
 
-
 // Default constructor
 // New matrix with 0s
 template <class T>
@@ -57,6 +56,11 @@ Matrix<T>::~Matrix() {
     if(matrix_data != nullptr){
         delete[] matrix_data;
     }
+}
+
+template <class T>
+int Matrix::sub_index(int row, int column){
+    
 }
 
 // Resize the matrix
