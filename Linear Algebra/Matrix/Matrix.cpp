@@ -59,7 +59,7 @@ Matrix<T>::~Matrix() {
 }
 
 template <class T>
-int Matrix::sub_index(int row, int column){
+int Matrix<T>::sub_to_index(int row, int column){
     
 }
 
