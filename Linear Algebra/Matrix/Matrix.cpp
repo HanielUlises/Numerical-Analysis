@@ -59,8 +59,8 @@ Matrix<T>::~Matrix() {
 }
 
 template <class T>
-int Matrix<T>::sub_to_index(int row, int column){
-    
+int Matrix<T>::sub_to_index(int row, int col) const {
+    return row * columns + col; 
 }
 
 // Resize the matrix
@@ -83,20 +83,22 @@ bool Matrix<T>::resize(int nRows, int nColumns) {
 
 template <class T>
 T Matrix<T>::get_element(int row, int column) {
-    if(row >= rows || column >= columns || row < 0 || column < 0) {
+    if (row >= rows || column >= columns || row < 0 || column < 0) {
         throw std::out_of_range("Index out of range");
     }
-    return data[row * columns + column];
+    return matrix_data[sub_to_index(row, column)];
 }
+
 
 template <class T>
 bool Matrix<T>::set_element(int row, int column, T element_value) {
-    if(row >= rows || column >= columns || row < 0 || column < 0) {
+    if (row >= rows || column >= columns || row < 0 || column < 0) {
         return false;
     }
-    data[row * columns + column] = element_value;
+    matrix_data[sub_to_index(row, column)] = element_value;
     return true;
 }
+
 
 template <class T>
 int Matrix<T>::get_num_rows() {

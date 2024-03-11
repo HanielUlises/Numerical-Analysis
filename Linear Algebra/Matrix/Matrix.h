@@ -28,7 +28,7 @@ class Matrix{
 
     // Operations
     // Equality
-    bool operator== (const Matrix<t> & rhs);
+    bool operator== (const Matrix<T> & rhs)
 
     // Sum of matrices
     template <class U> friend Matrix<U> operator+ (const Matrix<U>& lhs, cosnt Matrix<U>& rhs);
@@ -46,7 +46,7 @@ class Matrix{
     tempalte <class U> friend Matrix<U> operator* (const Matrix<U>& lhs, const U& rhs);
 
     private:
-    int sub_to_index(int row, int col);
+    int sub_to_index(int row, int col) const;
 
     private:
     int rows, columns, n_elements;
