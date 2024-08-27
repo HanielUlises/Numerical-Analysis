@@ -1,55 +1,58 @@
+#include "MonteCarlo.h"
+#include <random>
+#include <numeric>
 #include <iostream>
-#include <cstdlib>
-#include <cmath>
 
-template <typename T>
-class FuncionMonteCarlo {
-public:
-    T evaluar(T x) const {
-        return (std::pow(x, 4) * std::exp(-x)) / (x + 1);
+MonteCarlo::MonteCarlo(int numSimulations, std::function<double()> randomVariable)
+    : numSimulations(numSimulations), randomVariable(randomVariable) {}
+
+MonteCarlo::MonteCarlo(int numSimulations, std::function<double(double)> integrand, double a, double b)
+    : numSimulations(numSimulations), integrand1D(integrand), a(a), b(b) {}
+
+MonteCarlo::MonteCarlo(int numSimulations, std::function<double(const std::vector<double>&)> integrand, const std::vector<double>& lowerBounds, const std::vector<double>& upperBounds)
+    : numSimulations(numSimulations), integrandND(integrand), lowerBounds(lowerBounds), upperBounds(upperBounds) {}
+
+double MonteCarlo::calculateExpectedValue() {
+    double sum = 0.0;
+    for (int i = 0; i < numSimulations; ++i) {
+        sum += randomVariable();
     }
-};
+    return sum / numSimulations;
+}
 
-template <typename T>
-class EstimadorMonteCarlo {
-public:
-    EstimadorMonteCarlo(const FuncionMonteCarlo<T>& funcion) : funcion_(funcion) {}
+double MonteCarlo::calculateIntegral() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(a, b);
 
-    T estimar(T limiteInferior, T limiteSuperior, int iteraciones) {
-        T sumaTotal = 0;
+    double sum = 0.0;
+    for (int i = 0; i < numSimulations; ++i) {
+        double x = dis(gen);
+        sum += integrand1D(x);
+    }
 
-        for (int i = 0; i < iteraciones; i++) {
-            T numAleatorio = limiteInferior + (T(std::rand()) / RAND_MAX) * (limiteSuperior - limiteInferior);
-            T valorFuncion = funcion_.evaluar(numAleatorio);
-            sumaTotal += valorFuncion;
+    return (b - a) * sum / numSimulations;
+}
+
+double MonteCarlo::calculateMultidimensionalIntegral() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    
+    int dimensions = lowerBounds.size();
+    double volume = 1.0;
+    for (int i = 0; i < dimensions; ++i) {
+        volume *= (upperBounds[i] - lowerBounds[i]);
+    }
+
+    double sum = 0.0;
+    for (int i = 0; i < numSimulations; ++i) {
+        std::vector<double> x(dimensions);
+        for (int j = 0; j < dimensions; ++j) {
+            std::uniform_real_distribution<> dis(lowerBounds[j], upperBounds[j]);
+            x[j] = dis(gen);
         }
-
-        T estimacion = (limiteSuperior - limiteInferior) * sumaTotal / iteraciones;
-        return estimacion;
+        sum += integrandND(x);
     }
 
-private:
-    const FuncionMonteCarlo<T>& funcion_;
-};
-
-
-int main() {
-    FuncionMonteCarlo<double> funcionMonteCarlo;
-    EstimadorMonteCarlo<double> estimador(funcionMonteCarlo);
-
-    double limiteInferior;
-    double limiteSuperior;
-    int iteraciones = 800;
-
-    std::cout << "--Limites de integracion--" << std::endl;
-    std::cout << "Limite inferior: ";
-    std::cin >> limiteInferior;
-    std::cout << "\nLimite superior: ";
-    std::cin >> limiteSuperior;
-
-    double estimacion = estimador.estimar(limiteInferior, limiteSuperior, iteraciones);
-
-    std::cout << "Estimación para " << limiteInferior << " -> " << limiteSuperior << " es " << estimacion << " (" << iteraciones << " iteraciones)" << std::endl;
-
-    return 0;
+    return volume * sum / numSimulations;
 }
