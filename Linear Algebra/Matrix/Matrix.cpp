@@ -360,6 +360,100 @@ Matrix<T> Matrix<T>::diagonal_matrix(const std::vector<T>& diag_elements) {
     return result;
 }
 
+// QR Decomposition
+template <class T>
+Matrix<T> Matrix<T>::QRDecomposition(Matrix<T>& Q, Matrix<T>& R) const {
+    int n = rows;
+
+    Q = Matrix<T>::identity_matrix(n);
+    R = *this;
+
+    for (int k = 0; k < n - 1; ++k) {
+        T norm_x = 0;
+        for (int i = k; i < n; ++i) {
+            norm_x += R.get_element(i, k) * R.get_element(i, k);
+        }
+        norm_x = std::sqrt(norm_x);
+
+        if (R.get_element(k, k) < 0) {
+            norm_x = -norm_x;
+        }
+
+        T rkk = std::sqrt(0.5 * (norm_x * norm_x - R.get_element(k, k) * norm_x));
+        if (rkk == 0) {
+            continue;
+        }
+
+        std::vector<T> u(n, 0);
+        u[k] = (R.get_element(k, k) - norm_x) / (2 * rkk);
+        for (int i = k + 1; i < n; ++i) {
+            u[i] = R.get_element(i, k) / (2 * rkk);
+        }
+
+        for (int j = k; j < n; ++j) {
+            T sum = 0;
+            for (int i = k; i < n; ++i) {
+                sum += u[i] * R.get_element(i, j);
+            }
+            for (int i = k; i < n; ++i) {
+                R.set_element(i, j, R.get_element(i, j) - 2 * u[i] * sum);
+            }
+        }
+
+        for (int j = 0; j < n; ++j) {
+            T sum = 0;
+            for (int i = k; i < n; ++i) {
+                sum += u[i] * Q.get_element(i, j);
+            }
+            for (int i = k; i < n; ++i) {
+                Q.set_element(i, j, Q.get_element(i, j) - 2 * u[i] * sum);
+            }
+        }
+    }
+
+    Q = Q.transpose();
+    return R;
+}
+
+// QR Algorithm to compute all eigenvalues
+template <class T>
+std::vector<T> Matrix<T>::eigenvalues() const {
+    if (rows != columns) {
+        throw std::invalid_argument("Eigenvalues can only be calculated for square matrices");
+    }
+
+    Matrix<T> A = *this;
+    Matrix<T> Q(rows, columns);
+    Matrix<T> R(rows, columns);
+
+    const int max_iter = 1000;
+    const T tol = 1e-10;
+
+    for (int iter = 0; iter < max_iter; ++iter) {
+        A.QRDecomposition(Q, R);
+        A = R * Q;
+
+        bool is_converged = true;
+        for (int i = 0; i < rows - 1; ++i) {
+            if (std::abs(A.get_element(i + 1, i)) > tol) {
+                is_converged = false;
+                break;
+            }
+        }
+
+        if (is_converged) {
+            break;
+        }
+    }
+
+    std::vector<T> eigenvalues;
+    for (int i = 0; i < rows; ++i) {
+        eigenvalues.push_back(A.get_element(i, i));
+    }
+
+    return eigenvalues;
+}
+
 template class Matrix<int>;
 template class Matrix<float>;
 template class Matrix<double>;

@@ -4,6 +4,7 @@
 #include <algorithm> 
 #include <vector>
 #include <stdexcept>
+#include <complex>
 
 // Ontological definition
 // I've always wanted to write this into a .h file (sob)
@@ -55,8 +56,11 @@ class Matrix{
     static Matrix<T> identity_matrix(int n);
     static Matrix<T> diagonal_matrix(const std::vector<T>& diag_elements);
 
+    std::vector<T> eigenvalues() const;
+
     private:
     int sub_to_index(int row, int col) const;
+    Matrix<T> QRDecomposition(Matrix<T>& Q, Matrix<T>& R) const;
 
     private:
     int rows, columns, n_elements;
