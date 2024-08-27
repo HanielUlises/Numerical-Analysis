@@ -33,17 +33,17 @@ class Matrix{
     // Sum of matrices
     template <class U> friend Matrix<U> operator+ (const Matrix<U>& lhs, cosnt Matrix<U>& rhs);
     template <class U> friend Matrix<U> operator+ (const U& lhs, const Matrix<U>& rhs);
-    tempalte <class U> friend Matrix<U> operator+ (const Matrix<U>& lhs, const U& rhs);
+    template <class U> friend Matrix<U> operator+ (const Matrix<U>& lhs, const U& rhs);
 
     // Difference of matrices
     template <class U> friend Matrix<U> operator- (const Matrix<U>& lhs, cosnt Matrix<U>& rhs);
     template <class U> friend Matrix<U> operator- (const U& lhs, const Matrix<U>& rhs);
-    tempalte <class U> friend Matrix<U> operator- (const Matrix<U>& lhs, const U& rhs);
+    template <class U> friend Matrix<U> operator- (const Matrix<U>& lhs, const U& rhs);
 
     // Product of matrices
     template <class U> friend Matrix<U> operator* (const Matrix<U>& lhs, cosnt Matrix<U>& rhs);
     template <class U> friend Matrix<U> operator* (const U& lhs, const Matrix<U>& rhs);
-    tempalte <class U> friend Matrix<U> operator* (const Matrix<U>& lhs, const U& rhs);
+    template <class U> friend Matrix<U> operator* (const Matrix<U>& lhs, const U& rhs);
 
     private:
     int sub_to_index(int row, int col) const;

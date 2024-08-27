@@ -110,6 +110,129 @@ int Matrix<T>::get_num_cols() {
     return columns;
 }
 
+template <class T>
+bool Matrix<T>::operator==(const Matrix<T>& rhs) {
+    if (rows != rhs.rows || columns != rhs.columns) {
+        return false;
+    }
+
+    for (int i = 0; i < n_elements; ++i) {
+        if (matrix_data[i] != rhs.matrix_data[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Matrix + Matrix
+template <class U>
+Matrix<U> operator+(const Matrix<U>& lhs, const Matrix<U>& rhs) {
+    if (lhs.rows != rhs.rows || lhs.columns != rhs.columns) {
+        throw std::invalid_argument("Matrices must have the same dimensions for addition");
+    }
+
+    Matrix<U> result(lhs.rows, lhs.columns);
+    for (int i = 0; i < lhs.n_elements; ++i) {
+        result.matrix_data[i] = lhs.matrix_data[i] + rhs.matrix_data[i];
+    }
+
+    return result;
+}
+
+// Scalar + Matrix
+template <class U>
+Matrix<U> operator+(const U& lhs, const Matrix<U>& rhs) {
+    Matrix<U> result(rhs.rows, rhs.columns);
+    for (int i = 0; i < rhs.n_elements; ++i) {
+        result.matrix_data[i] = lhs + rhs.matrix_data[i];
+    }
+
+    return result;
+}
+
+// Matrix + Scalar
+template <class U>
+Matrix<U> operator+(const Matrix<U>& lhs, const U& rhs) {
+    return rhs + lhs;  // Reusing Scalar + Matrix implementation
+}
+
+// Matrix - Matrix
+template <class U>
+Matrix<U> operator-(const Matrix<U>& lhs, const Matrix<U>& rhs) {
+    if (lhs.rows != rhs.rows || lhs.columns != rhs.columns) {
+        throw std::invalid_argument("Matrices must have the same dimensions for subtraction");
+    }
+
+    Matrix<U> result(lhs.rows, lhs.columns);
+    for (int i = 0; i < lhs.n_elements; ++i) {
+        result.matrix_data[i] = lhs.matrix_data[i] - rhs.matrix_data[i];
+    }
+
+    return result;
+}
+
+// Scalar - Matrix
+template <class U>
+Matrix<U> operator-(const U& lhs, const Matrix<U>& rhs) {
+    Matrix<U> result(rhs.rows, rhs.columns);
+    for (int i = 0; i < rhs.n_elements; ++i) {
+        result.matrix_data[i] = lhs - rhs.matrix_data[i];
+    }
+
+    return result;
+}
+
+// Matrix - Scalar
+template <class U>
+Matrix<U> operator-(const Matrix<U>& lhs, const U& rhs) {
+    Matrix<U> result(lhs.rows, lhs.columns);
+    for (int i = 0; i < lhs.n_elements; ++i) {
+        result.matrix_data[i] = lhs.matrix_data[i] - rhs;
+    }
+
+    return result;
+}
+
+// Matrix * Matrix
+template <class U>
+Matrix<U> operator*(const Matrix<U>& lhs, const Matrix<U>& rhs) {
+    if (lhs.columns != rhs.rows) {
+        throw std::invalid_argument("Matrices must have appropriate dimensions for multiplication");
+    }
+
+    Matrix<U> result(lhs.rows, rhs.columns);
+    for (int i = 0; i < lhs.rows; ++i) {
+        for (int j = 0; j < rhs.columns; ++j) {
+            U sum = 0;
+            for (int k = 0; k < lhs.columns; ++k) {
+                sum += lhs.get_element(i, k) * rhs.get_element(k, j);
+            }
+            result.set_element(i, j, sum);
+        }
+    }
+
+    return result;
+}
+
+// Scalar * Matrix
+template <class U>
+Matrix<U> operator*(const U& lhs, const Matrix<U>& rhs) {
+    Matrix<U> result(rhs.rows, rhs.columns);
+    for (int i = 0; i < rhs.n_elements; ++i) {
+        result.matrix_data[i] = lhs * rhs.matrix_data[i];
+    }
+
+    return result;
+}
+
+// Matrix * Scalar
+template <class U>
+Matrix<U> operator*(const Matrix<U>& lhs, const U& rhs) {
+    return rhs * lhs; 
+}
+
+
 template class Matrix<int>;
 template class Matrix<float>;
 template class Matrix<double>;
