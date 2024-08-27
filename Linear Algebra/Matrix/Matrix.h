@@ -45,6 +45,16 @@ class Matrix{
     template <class U> friend Matrix<U> operator* (const U& lhs, const Matrix<U>& rhs);
     template <class U> friend Matrix<U> operator* (const Matrix<U>& lhs, const U& rhs);
 
+    Matrix<T> transpose() const;
+    T determinant() const;
+    Matrix<T> inverse() const;
+    T trace() const;
+    void fill(T value);
+
+    static Matrix<T> zero_matrix(int n, int m);
+    static Matrix<T> identity_matrix(int n);
+    static Matrix<T> diagonal_matrix(const std::vector<T>& diag_elements);
+
     private:
     int sub_to_index(int row, int col) const;
 

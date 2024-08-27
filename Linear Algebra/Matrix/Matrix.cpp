@@ -232,6 +232,133 @@ Matrix<U> operator*(const Matrix<U>& lhs, const U& rhs) {
     return rhs * lhs; 
 }
 
+// Transpose Method
+template <class T>
+Matrix<T> Matrix<T>::transpose() const {
+    Matrix<T> result(columns, rows);
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            result.set_element(j, i, get_element(i, j));
+        }
+    }
+    return result;
+}
+
+// Determinant Method
+template <class T>
+T Matrix<T>::determinant() const {
+    if (rows != columns) {
+        throw std::invalid_argument("Determinant can only be calculated for square matrices");
+    }
+
+    if (rows == 1) {
+        return matrix_data[0];
+    }
+
+    if (rows == 2) {
+        return matrix_data[0] * matrix_data[3] - matrix_data[1] * matrix_data[2];
+    }
+
+    T det = 0;
+    for (int i = 0; i < columns; ++i) {
+        Matrix<T> subMatrix(rows - 1, columns - 1);
+
+        for (int subRow = 1; subRow < rows; ++subRow) {
+            int subColIndex = 0;
+            for (int subCol = 0; subCol < columns; ++subCol) {
+                if (subCol == i) continue;
+                subMatrix.set_element(subRow - 1, subColIndex, get_element(subRow, subCol));
+                ++subColIndex;
+            }
+        }
+
+        T subDet = subMatrix.determinant();
+        det += (i % 2 == 0 ? 1 : -1) * matrix_data[i] * subDet;
+    }
+    return det;
+}
+
+// Inverse Method
+template <class T>
+Matrix<T> Matrix<T>::inverse() const {
+    if (rows != columns) {
+        throw std::invalid_argument("Inverse can only be calculated for square matrices");
+    }
+
+    T det = determinant();
+    if (det == 0) {
+        throw std::runtime_error("Matrix is singular and cannot be inverted");
+    }
+
+    Matrix<T> adjoint(rows, columns);
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            Matrix<T> subMatrix(rows - 1, columns - 1);
+            for (int subRow = 0; subRow < rows; ++subRow) {
+                if (subRow == i) continue;
+                int subColIndex = 0;
+                for (int subCol = 0; subCol < columns; ++subCol) {
+                    if (subCol == j) continue;
+                    subMatrix.set_element(subRow < i ? subRow : subRow - 1, subColIndex, get_element(subRow, subCol));
+                    ++subColIndex;
+                }
+            }
+            adjoint.set_element(j, i, ((i + j) % 2 == 0 ? 1 : -1) * subMatrix.determinant());
+        }
+    }
+    return (1 / det) * adjoint;
+}
+
+// Trace Method
+template <class T>
+T Matrix<T>::trace() const {
+    if (rows != columns) {
+        throw std::invalid_argument("Trace can only be calculated for square matrices");
+    }
+
+    T traceSum = 0;
+    for (int i = 0; i < rows; ++i) {
+        traceSum += get_element(i, i);
+    }
+    return traceSum;
+}
+
+// Fill Method
+template <class T>
+void Matrix<T>::fill(T value) {
+    for (int i = 0; i < n_elements; ++i) {
+        matrix_data[i] = value;
+    }
+}
+
+// Create a Zero Matrix
+template <class T>
+Matrix<T> Matrix<T>::zero_matrix(int n, int m) {
+    Matrix<T> result(n, m);
+    result.fill(0);
+    return result;
+}
+
+// Create an Identity Matrix
+template <class T>
+Matrix<T> Matrix<T>::identity_matrix(int n) {
+    Matrix<T> result(n, n);
+    for (int i = 0; i < n; ++i) {
+        result.set_element(i, i, 1);
+    }
+    return result;
+}
+
+// Create a Diagonal Matrix
+template <class T>
+Matrix<T> Matrix<T>::diagonal_matrix(const std::vector<T>& diag_elements) {
+    int n = diag_elements.size();
+    Matrix<T> result(n, n);
+    for (int i = 0; i < n; ++i) {
+        result.set_element(i, i, diag_elements[i]);
+    }
+    return result;
+}
 
 template class Matrix<int>;
 template class Matrix<float>;
