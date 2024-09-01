@@ -62,7 +62,8 @@
     "list": "cpp",
     "unordered_map": "cpp",
     "xhash": "cpp",
-    "random": "cpp"
+    "random": "cpp",
+    "numeric": "cpp"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
