@@ -58,6 +58,10 @@ class Matrix{
 
     std::vector<T> eigenvalues() const;
 
+    Matrix<T> CholeskyDecomposition() const;
+    Matrix<T> power(int exponent) const;
+    Matrix<T> hadamard_product(const Matrix<T>& other) const;
+
     private:
     int sub_to_index(int row, int col) const;
     Matrix<T> QRDecomposition(Matrix<T>& Q, Matrix<T>& R) const;

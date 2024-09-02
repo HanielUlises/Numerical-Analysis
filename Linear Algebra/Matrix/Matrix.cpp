@@ -454,6 +454,71 @@ std::vector<T> Matrix<T>::eigenvalues() const {
     return eigenvalues;
 }
 
+template <class T>
+Matrix<T> Matrix<T>::CholeskyDecomposition() const {
+    if (rows != columns) {
+        throw std::invalid_argument("Cholesky Decomposition requires a square matrix");
+    }
+
+    Matrix<T> L(rows, columns);
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j <= i; ++j) {
+            T sum = 0;  // This will hold the sum of L(i, k) * L(j, k) for k = 0 to j-1
+
+            // Sum of L(i, k) * L(j, k) for all k < j
+            for (int k = 0; k < j; ++k) {
+                sum += L.get_element(i, k) * L.get_element(j, k);
+            }
+
+            // For diagonal elements (i == j), calculate L(i, j) = sqrt(A(i, i) - sum)
+            if (i == j) {
+                L.set_element(i, j, std::sqrt(get_element(i, i) - sum));
+            }
+            // For off-diagonal elements, calculate L(i, j) = (A(i, j) - sum) / L(j, j)
+            else {
+                L.set_element(i, j, (get_element(i, j) - sum) / L.get_element(j, j));
+            }
+        }
+    }
+
+    return L;
+}
+
+template <class T>
+Matrix<T> Matrix<T>::power(int exponent) const {
+    if (rows != columns) {
+        throw std::invalid_argument("Matrix exponentiation requires a square matrix");
+    }
+
+    Matrix<T> result = Matrix<T>::identity_matrix(rows);
+    Matrix<T> base = *this;
+
+    while (exponent > 0) {
+        if (exponent % 2 == 1) {
+            result = result * base;
+        }
+        base = base * base;
+        exponent /= 2;
+    }
+
+    return result;
+}
+
+// Product-wise multiplication
+template <class T>
+Matrix<T> Matrix<T>::hadamard_product(const Matrix<T>& other) const {
+    if (rows != other.rows || columns != other.columns) {
+        throw std::invalid_argument("Matrices must have the same dimensions for Hadamard product");
+    }
+
+    Matrix<T> result(rows, columns);
+    for (int i = 0; i < n_elements; ++i) {
+        result.matrix_data[i] = matrix_data[i] * other.matrix_data[i];
+    }
+
+    return result;
+}
+
 template class Matrix<int>;
 template class Matrix<float>;
 template class Matrix<double>;
