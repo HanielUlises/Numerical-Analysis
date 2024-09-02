@@ -3,171 +3,195 @@
 #include <cmath>
 #include <cassert>
 
-bool isEqual(float x, float y) {
-    return fabs(x - y) < EPSILON;
-}
-
-bool isGreaterThanOrEqual(float x, float y) {
-    return x > y || isEqual(x, y);
-}
-
-bool isLessThanOrEqual(float x, float y) {
-    return x < y || isEqual(x, y);
-}
-
-Vector2D operator*(float scalar, const Vector2D& vect) {
-    return vect * scalar;
-}
-
-std::ostream& operator<<(std::ostream& consoleOut, const Vector2D& vector) {
-    consoleOut << "(" << vector.getX() << ", " << vector.getY() << ")";
+template<typename T>
+std::ostream& operator<<(std::ostream& consoleOut, const Vector2D<T>& vector) {
+    consoleOut << "X: " << vector.mX << " Y: " << vector.mY << std::endl;
     return consoleOut;
 }
 
-bool Vector2D::operator==(const Vector2D& Vect) const {
-    return isEqual(mX, Vect.mX) && isEqual(mY, Vect.mY);
+template<typename T>
+bool Vector2D<T>::operator==(const Vector2D<T>& Vect) const {
+    return std::fabs(mX - Vect.mX) < std::numeric_limits<T>::epsilon() && 
+           std::fabs(mY - Vect.mY) < std::numeric_limits<T>::epsilon();
 }
 
-bool Vector2D::operator!=(const Vector2D& Vect) const {
+template<typename T>
+bool Vector2D<T>::operator!=(const Vector2D<T>& Vect) const {
     return !(*this == Vect);
 }
 
-Vector2D Vector2D::operator-() const {
-    return Vector2D(-mX, -mY);
+template<typename T>
+Vector2D<T> Vector2D<T>::operator-() const {
+    return Vector2D<T>(-mX, -mY);
 }
 
-Vector2D Vector2D::operator*(float scale) const {
-    return Vector2D(mX * scale, mY * scale);
+template<typename T>
+Vector2D<T> Vector2D<T>::operator*(T scale) const {
+    return Vector2D<T>(mX * scale, mY * scale);
 }
 
-Vector2D Vector2D::operator/(float scale) const {
-    assert(fabs(scale) > EPSILON);
-    return Vector2D(mX / scale, mY / scale);
+template<typename T>
+Vector2D<T> Vector2D<T>::operator/(T scale) const {
+    assert(std::fabs(scale) > std::numeric_limits<T>::epsilon());
+    return Vector2D<T>(mX / scale, mY / scale);
 }
 
-Vector2D& Vector2D::operator*=(float scale) {
-    mX *= scale;
-    mY *= scale;
+template<typename T>
+Vector2D<T>& Vector2D<T>::operator*=(T scale) {
+    *this = *this * scale;
     return *this;
 }
 
-Vector2D& Vector2D::operator/=(float scale) {
-    assert(fabs(scale) > EPSILON);
-    mX /= scale;
-    mY /= scale;
+template<typename T>
+Vector2D<T>& Vector2D<T>::operator/=(T scale) {
+    assert(std::fabs(scale) > std::numeric_limits<T>::epsilon());
+    *this = *this / scale;
     return *this;
 }
 
-Vector2D Vector2D::operator+(const Vector2D& vec) const {
-    return Vector2D(mX + vec.mX, mY + vec.mY);
+template<typename T>
+Vector2D<T> Vector2D<T>::operator+(const Vector2D<T>& vec) const {
+    return Vector2D<T>(mX + vec.mX, mY + vec.mY);
 }
 
-Vector2D Vector2D::operator-(const Vector2D& vec) const {
-    return Vector2D(mX - vec.mX, mY - vec.mY);
+template<typename T>
+Vector2D<T> Vector2D<T>::operator-(const Vector2D<T>& vec) const {
+    return Vector2D<T>(mX - vec.mX, mY - vec.mY);
 }
 
-Vector2D& Vector2D::operator+=(const Vector2D& vec) {
-    mX += vec.mX;
-    mY += vec.mY;
+template<typename T>
+Vector2D<T>& Vector2D<T>::operator+=(const Vector2D<T>& vec) {
+    *this = *this + vec;
     return *this;
 }
 
-Vector2D& Vector2D::operator-=(const Vector2D& vec) {
-    mX -= vec.mX;
-    mY -= vec.mY;
+template<typename T>
+Vector2D<T>& Vector2D<T>::operator-=(const Vector2D<T>& vec) {
+    *this = *this - vec;
     return *this;
 }
 
-float Vector2D::Magnitude() const {
-    return sqrt((mX * mX) + (mY * mY));
+template<typename T>
+T Vector2D<T>::Magnitude() const {
+    return std::sqrt((mX * mX) + (mY * mY));
 }
 
-Vector2D Vector2D::getUnitVect() const {
-    float magnitude = Magnitude();
-    if (magnitude > EPSILON) {
+template<typename T>
+Vector2D<T> Vector2D<T>::getUnitVect() const {
+    T magnitude = Magnitude();
+
+    if (magnitude > std::numeric_limits<T>::epsilon()) {
         return *this / magnitude;
     }
-    return Vector2D::zero;
+
+    return Vector2D<T>::zero;
 }
 
-Vector2D& Vector2D::normalizeVect() {
-    float magnitude = Magnitude();
-    if (magnitude > EPSILON) {
+template<typename T>
+Vector2D<T>& Vector2D<T>::normalizeVect() {
+    T magnitude = Magnitude();
+    if (magnitude > std::numeric_limits<T>::epsilon()) {
         *this /= magnitude;
     }
+
     return *this;
 }
 
-float Vector2D::distance(const Vector2D& vec) const {
-    return (*this - vec).Magnitude();
+template<typename T>
+T Vector2D<T>::distance(const Vector2D<T>& vec) const {
+    return (vec - *this).Magnitude();
 }
 
-float Vector2D::dotProduct(const Vector2D& vec) const {
+template<typename T>
+T Vector2D<T>::dotProduct(const Vector2D<T>& vec) const {
     return (mX * vec.mX) + (mY * vec.mY);
 }
 
-float Vector2D::crossProduct(const Vector2D& vec) const {
-    return mX * vec.mY - mY * vec.mX;
+template<typename T>
+T Vector2D<T>::crossProduct(const Vector2D<T>& vec) const {
+    return (mX * vec.mY) - (mY * vec.mX);
 }
 
-Vector2D Vector2D::projectOnto(const Vector2D& vec) const {
-    Vector2D unitVec = vec.getUnitVect();
-    float dot = dotProduct(unitVec);
-    return unitVec * dot;
+template<typename T>
+T Vector2D<T>::angleBetween(const Vector2D<T>& vec2) const {
+    return std::acos(getUnitVect().dotProduct(vec2.getUnitVect()));
 }
 
-float Vector2D::angleBetween(const Vector2D& vec2) const {
-    return acosf(getUnitVect().dotProduct(vec2.getUnitVect()));
+template<typename T>
+Vector2D<T> Vector2D<T>::projectOnto(const Vector2D<T>& vec) const {
+    Vector2D<T> unitVec2 = vec.getUnitVect();
+
+    T magnitude2 = vec.Magnitude();
+
+    if (magnitude2 <= std::numeric_limits<T>::epsilon()) {
+        return Vector2D<T>::zero;
+    }
+    T dot = dotProduct(vec);
+    return unitVec2 * dot;
 }
 
-float Vector2D::angleTo(const Vector2D& from, const Vector2D& to) {
-    float dot = from.dotProduct(to);
-    float det = from.crossProduct(to);
-    return atan2(det, dot);
-}
-
-Vector2D Vector2D::reflect(const Vector2D& normal) const {
+template<typename T>
+Vector2D<T> Vector2D<T>::reflect(const Vector2D<T>& normal) const {
     return *this - 2 * projectOnto(normal);
 }
 
-void Vector2D::rotate(float angle, const Vector2D& aroundPoint) {
-    float cosine = cosf(angle);
-    float sine = sinf(angle);
+template<typename T>
+void Vector2D<T>::rotate(T angle, const Vector2D<T>& aroundPoint) {
+    T cosine = std::cos(angle);
+    T sine = std::sin(angle);
 
-    Vector2D thisVector(mX, mY);
+    Vector2D<T> thisVector(mX, mY);
+
     thisVector -= aroundPoint;
 
-    float xRot = thisVector.mX * cosine - thisVector.mY * sine;
-    float yRot = thisVector.mX * sine + thisVector.mY * cosine;
+    T xRot = thisVector.mX * cosine - thisVector.mY * sine;
+    T yRot = thisVector.mX * sine + thisVector.mY * cosine;
 
-    *this = Vector2D(xRot, yRot) + aroundPoint;
+    Vector2D<T> rotated = Vector2D<T>(xRot, yRot);
+    *this = rotated + aroundPoint;
 }
 
-Vector2D Vector2D::rotation(float angle, const Vector2D& aroundPoint) const {
-    float cosine = cosf(angle);
-    float sine = sinf(angle);
+template<typename T>
+Vector2D<T> Vector2D<T>::rotation(T angle, const Vector2D<T>& aroundPoint) const {
+    T cosine = std::cos(angle);
+    T sine = std::sin(angle);
 
-    Vector2D thisVector(mX, mY);
+    Vector2D<T> thisVector(mX, mY);
+
     thisVector -= aroundPoint;
 
-    float xRot = thisVector.mX * cosine - thisVector.mY * sine;
-    float yRot = thisVector.mX * sine + thisVector.mY * cosine;
+    T xRot = thisVector.mX * cosine - thisVector.mY * sine;
+    T yRot = thisVector.mX * sine + thisVector.mY * cosine;
 
-    return Vector2D(xRot, yRot) + aroundPoint;
+    Vector2D<T> rotated = Vector2D<T>(xRot, yRot);
+    return rotated + aroundPoint;
 }
 
-void Vector2D::clampMagnitude(float maxMagnitude) {
-    float mag = Magnitude();
+template<typename T>
+void Vector2D<T>::clampMagnitude(T maxMagnitude) {
+    T mag = Magnitude();
     if (mag > maxMagnitude) {
-        float scale = maxMagnitude / mag;
+        T scale = maxMagnitude / mag;
         *this *= scale;
     }
 }
 
-Vector2D Vector2D::lerp(const Vector2D& a, const Vector2D& b, float t) {
+template<typename T>
+Vector2D<T> Vector2D<T>::lerp(const Vector2D<T>& a, const Vector2D<T>& b, T t) {
     return a + t * (b - a);
 }
 
-Vector2D Vector2D::orthogonal() const {
-    return Vector2D(-mY, mX);
+template<typename T>
+T Vector2D<T>::angleTo(const Vector2D<T>& from, const Vector2D<T>& to) {
+    return std::atan2(to.mY - from.mY, to.mX - from.mX);
 }
+
+template<typename T>
+Vector2D<T> operator*(T scalar, const Vector2D<T>& vect) {
+    return Vector2D<T>(vect.mX * scalar, vect.mY * scalar);
+}
+
+template class Vector2D<float>;
+template class Vector2D<double>;
+template std::ostream& operator<< <float>(std::ostream&, const Vector2D<float>&);
+template std::ostream& operator<< <double>(std::ostream&, const Vector2D<double>&);

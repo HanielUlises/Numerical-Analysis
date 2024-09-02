@@ -1,77 +1,58 @@
+#include <iostream>
 #include "Vector2D.h"
 
-std::ostream& operator<<(std::ostream& consoleOut, const Vector2D& vector) {
-    consoleOut << "X: " << vector.getX() << " Y: " << vector.getY() << std::endl;
-    return consoleOut;
-}
-
-
 int main() {
-    // Create some Vector2D objects
-    Vector2D vec1(2, 8);
-    Vector2D vec2(3, -4);
-    Vector2D vec3(1, 1);
+    // Float datatypes (testing templates)
+    Vector2D<float> vecFloat1(2.0f, 8.0f);
+    Vector2D<float> vecFloat2(3.0f, -4.0f);
 
-    // Test negation
-    Vector2D negatedVec = -vec1;
-    std::cout << "Negated vec1: " << negatedVec;
+    Vector2D<float> negatedVecFloat = -vecFloat1;
+    std::cout << "Negated vecFloat1: " << negatedVecFloat;
 
-    // Test scalar multiplication and division
-    Vector2D scaledUpVec = 2 * vec1;
-    Vector2D scaledDownVec = vec1 / 2;
-    std::cout << "Scaled up vec1 (by 2): " << scaledUpVec;
-    std::cout << "Scaled down vec1 (by 2): " << scaledDownVec;
+    Vector2D<float> scaledUpVecFloat = 2.0f * vecFloat1;
+    Vector2D<float> scaledDownVecFloat = vecFloat1 / 2.0f;
+    std::cout << "Scaled up vecFloat1 (by 2): " << scaledUpVecFloat;
+    std::cout << "Scaled down vecFloat1 (by 2): " << scaledDownVecFloat;
 
-    // Test addition and subtraction
-    Vector2D sumVec = vec1 + vec2;
-    Vector2D diffVec = vec1 - vec2;
-    std::cout << "Sum of vec1 and vec2: " << sumVec;
-    std::cout << "Difference between vec1 and vec2: " << diffVec;
+    Vector2D<float> sumVecFloat = vecFloat1 + vecFloat2;
+    Vector2D<float> diffVecFloat = vecFloat1 - vecFloat2;
+    std::cout << "Sum of vecFloat1 and vecFloat2: " << sumVecFloat;
+    std::cout << "Difference between vecFloat1 and vecFloat2: " << diffVecFloat;
 
-    // Test magnitude
-    float magnitudeVec1 = vec1.Magnitude();
-    std::cout << "Magnitude of vec1: " << magnitudeVec1 << std::endl;
+    float magnitudeVecFloat1 = vecFloat1.Magnitude();
+    std::cout << "Magnitude of vecFloat1: " << magnitudeVecFloat1 << std::endl;
 
-    // Test normalization
-    Vector2D unitVec = vec1.getUnitVect();
-    std::cout << "Unit vector of vec1: " << unitVec;
+    Vector2D<float> unitVecFloat = vecFloat1.getUnitVect();
+    std::cout << "Unit vector of vecFloat1: " << unitVecFloat;
 
-    // Test dot product
-    float dotProd = vec1.dotProduct(vec2);
-    std::cout << "Dot product of vec1 and vec2: " << dotProd << std::endl;
+    // Double datatypes (testing templates)
+    Vector2D<double> vecDouble1(123.456789, -987.654321);
+    Vector2D<double> vecDouble2(-456.123456, 321.654987);
 
-    // Test cross product
-    float crossProd = vec1.crossProduct(vec2);
-    std::cout << "Cross product of vec1 and vec2: " << crossProd << std::endl;
+    Vector2D<double> negatedVecDouble = -vecDouble1;
+    std::cout << "Negated vecDouble1: " << negatedVecDouble;
 
-    // Test angle between vectors
-    float angleBetweenVecs = vec1.angleBetween(vec2);
-    std::cout << "Angle between vec1 and vec2: " << angleBetweenVecs << " radians" << std::endl;
+    Vector2D<double> scaledUpVecDouble = 2.5 * vecDouble1;
+    Vector2D<double> scaledDownVecDouble = vecDouble1 / 2.5;
+    std::cout << "Scaled up vecDouble1 (by 2.5): " << scaledUpVecDouble;
+    std::cout << "Scaled down vecDouble1 (by 2.5): " << scaledDownVecDouble;
 
-    // Test projection of vec1 onto vec2
-    Vector2D projectionVec = vec1.projectOnto(vec2);
-    std::cout << "Projection of vec1 onto vec2: " << projectionVec;
+    Vector2D<double> sumVecDouble = vecDouble1 + vecDouble2;
+    Vector2D<double> diffVecDouble = vecDouble1 - vecDouble2;
+    std::cout << "Sum of vecDouble1 and vecDouble2: " << sumVecDouble;
+    std::cout << "Difference between vecDouble1 and vecDouble2: " << diffVecDouble;
 
-    // Test reflection of vec1 across vec3
-    Vector2D reflectionVec = vec1.reflect(vec3);
-    std::cout << "Reflection of vec1 across vec3: " << reflectionVec;
+    double magnitudeVecDouble1 = vecDouble1.Magnitude();
+    std::cout << "Magnitude of vecDouble1: " << magnitudeVecDouble1 << std::endl;
 
-    // Test rotation of vec1 around vec3 by 90 degrees (PI/2 radians)
-    vec1.rotate(3.14159265358979323846 / 2, vec3);
-    std::cout << "vec1 rotated 90 degrees around vec3: " << vec1;
-
-    // Test clamping magnitude
-    vec2.clampMagnitude(5.0f);
-    std::cout << "vec2 clamped to max magnitude 5: " << vec2;
-
-    // Test orthogonal vector
-    Vector2D orthogonalVec = vec1.orthogonal();
-    std::cout << "Orthogonal vector to vec1: " << orthogonalVec;
-
-    // Test linear interpolation (lerp)
-    Vector2D lerpVec = Vector2D::lerp(vec1, vec2, 0.5f);
-    std::cout << "Lerp between vec1 and vec2 at t=0.5: " << lerpVec;
+    Vector2D<double> unitVecDouble = vecDouble1.getUnitVect();
+    std::cout << "Unit vector of vecDouble1: " << unitVecDouble;
 
     return 0;
 }
 
+template<typename T>
+std::ostream& operator<<(std::ostream& consoleOut, const Vector2D<T>& vector) {
+    consoleOut << "X: " << vector.getX() << " Y: " << vector.getY();
+    return consoleOut;
+}
