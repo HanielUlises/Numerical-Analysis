@@ -29,20 +29,20 @@ class Matrix{
 
     // Operations
     // Equality
-    bool operator== (const Matrix<T> & rhs)
+    bool operator== (const Matrix<T> & rhs);
 
     // Sum of matrices
-    template <class U> friend Matrix<U> operator+ (const Matrix<U>& lhs, cosnt Matrix<U>& rhs);
+    template <class U> friend Matrix<U> operator+ (const Matrix<U>& lhs, const Matrix<U>& rhs);
     template <class U> friend Matrix<U> operator+ (const U& lhs, const Matrix<U>& rhs);
     template <class U> friend Matrix<U> operator+ (const Matrix<U>& lhs, const U& rhs);
 
     // Difference of matrices
-    template <class U> friend Matrix<U> operator- (const Matrix<U>& lhs, cosnt Matrix<U>& rhs);
+    template <class U> friend Matrix<U> operator- (const Matrix<U>& lhs, const Matrix<U>& rhs);
     template <class U> friend Matrix<U> operator- (const U& lhs, const Matrix<U>& rhs);
     template <class U> friend Matrix<U> operator- (const Matrix<U>& lhs, const U& rhs);
 
     // Product of matrices
-    template <class U> friend Matrix<U> operator* (const Matrix<U>& lhs, cosnt Matrix<U>& rhs);
+    template <class U> friend Matrix<U> operator* (const Matrix<U>& lhs, const Matrix<U>& rhs);
     template <class U> friend Matrix<U> operator* (const U& lhs, const Matrix<U>& rhs);
     template <class U> friend Matrix<U> operator* (const Matrix<U>& lhs, const U& rhs);
 
