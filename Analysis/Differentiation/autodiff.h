@@ -8,44 +8,40 @@
 #include <utility>
 
 template <typename T>
-struct ValueAndPartial {
+struct value_and_partial {
     static_assert(std::is_same_v<T, float> || std::is_same_v<T, double>,
                   "Only float and double are supported.");
     T value, partial;
 };
 
 template <typename T>
-struct Variable; 
+struct variable;
 
 template <typename T>
-struct Expression {
-    virtual ~Expression() = default;
-    virtual ValueAndPartial<T> evaluateAndDerive(Variable<T>* variable) = 0;
+struct expression {
+    virtual ~expression() = default;
+    virtual value_and_partial<T> evaluate_and_derive(variable<T>* var) = 0;
 };
 
-// An independent variable
 template <typename T>
-struct Variable : public Expression<T> {
+struct variable : public expression<T> {
     T value;
-    explicit Variable(T value);
-    ValueAndPartial<T> evaluateAndDerive(Variable<T>* variable) override;
+    explicit variable(T value);
+    value_and_partial<T> evaluate_and_derive(variable<T>* var) override;
 };
 
-// Plus 
 template <typename T, typename... Ops>
-struct Plus : public Expression<T> {
+struct plus : public expression<T> {
     std::tuple<Ops...> operands;
-    explicit Plus(Ops... ops);
-    ValueAndPartial<T> evaluateAndDerive(Variable<T>* variable) override;
+    explicit plus(Ops... ops);
+    value_and_partial<T> evaluate_and_derive(variable<T>* var) override;
 };
 
-// Multiply
-// It implements the product rule for the derivative.
 template <typename T, typename... Ops>
-struct Multiply : public Expression<T> {
+struct multiply : public expression<T> {
     std::tuple<Ops...> operands;
-    explicit Multiply(Ops... ops);
-    ValueAndPartial<T> evaluateAndDerive(Variable<T>* variable) override;
+    explicit multiply(Ops... ops);
+    value_and_partial<T> evaluate_and_derive(variable<T>* var) override;
 };
 
 #endif // AUTODIFF_H
