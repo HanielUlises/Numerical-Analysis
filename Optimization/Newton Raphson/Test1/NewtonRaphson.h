@@ -2,18 +2,43 @@
 #define NEWTONRAPHSON_H
 
 #include <cmath>
+#include <stdexcept>
+#include <functional>
+#include <optional>
+#include <limits>
 
-// Class template for Newton-Raphson Method
-template<typename Func, typename DerivFunc>
+template<typename T, typename Func, typename DerivFunc>
 class NewtonRaphson {
 public:
-    NewtonRaphson(Func f, DerivFunc df);
+    struct Config {
+        int maxIterations = 100;
+        T tolerance = 1e-6;
+        T derivativeStep = 1e-6;
+        T divergenceThreshold = 1e6;
+    };
 
-    float findRoot(float initialGuess, int maxIterations, float tolerance) const;
+    NewtonRaphson(Func f, DerivFunc df, Config config = Config());
+    explicit NewtonRaphson(Func f, Config config = Config());
+
+    std::optional<T> findRoot(T initialGuess) const;
+
+    struct ConvergenceInfo {
+        int iterationsUsed = 0;
+        bool converged = false;
+        T lastError = 0;
+        std::string status;
+    };
+    ConvergenceInfo getConvergenceInfo() const;
 
 private:
-    Func f;        // Function whose root is to be found
-    DerivFunc df;  // Derivative of the function
+    Func f;
+    DerivFunc df;
+    bool useNumericalDeriv;
+    Config config;
+    mutable ConvergenceInfo lastRunInfo;
+
+    T numericalDerivative(T x) const;
+    void validateParameters() const;
 };
 
 #endif
